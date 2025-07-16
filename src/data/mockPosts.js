@@ -1,0 +1,155 @@
+export default [
+    {
+      id: "post_1",
+      title: "Post about spam",
+      content: "Buy cheap sunglasses now!",
+      author: { username: "user123", id: "user_1" },
+      reportedReason: "Spam",
+      reportedAt: "2025-07-14T09:00:00Z",
+      status: "pending",
+      reportCount: 2,
+      imageUrl: "https://images.unsplash.com/photo-1594979194853-f7dcd77a0a1b?q=80&w=2912&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+      id: "post_2",
+      title: "Offensive comment",
+      content: "You are stupid!",
+      author: { username: "user456", id: "user_2" },
+      reportedReason: "Abuse",
+      reportedAt: "2025-07-13T13:45:00Z",
+      status: "pending",
+      reportCount: 5,
+      imageUrl:"https://images.unsplash.com/photo-1583225214464-9296029427aa?q=80&w=2257&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+      id: "post_3",
+      title: "Fake giveaway post",
+      content: "Send me $100 to get $1000 back!",
+      author: { username: "giveawayKing", id: "user_3" },
+      reportedReason: "Scam",
+      reportedAt: "2025-07-13T11:10:00Z",
+      status: "pending",
+      reportCount: 4,
+      imageUrl:"https://images.unsplash.com/photo-1563296299-f55c4be21f95?q=80&w=1548&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+      id: "post_4",
+      title: "Harassment message",
+      content: "You're such a loser.",
+      author: { username: "angryUser88", id: "user_4" },
+      reportedReason: "Harassment",
+      reportedAt: "2025-07-12T08:20:00Z",
+      status: "pending",
+      reportCount: 6,
+      imageUrl:"https://images.unsplash.com/photo-1600426976689-8c76bef1b564?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+      id: "post_5",
+      title: "Low quality meme post",
+      content: "Random meme that's blurry and offensive",
+      author: { username: "memeBoi", id: "user_5" },
+      reportedReason: "Low Quality",
+      reportedAt: "2025-07-12T15:00:00Z",
+      status: "pending",
+      reportCount: 1,
+      imageUrl:"https://images.unsplash.com/photo-1674981959759-b6d2f9657f64?q=80&w=2825&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+      id: "post_6",
+      title: "Irrelevant link share",
+      content: "Check out this unrelated video!",
+      author: { username: "linkDropper", id: "user_6" },
+      reportedReason: "Off-topic",
+      reportedAt: "2025-07-11T10:30:00Z",
+      status: "pending",
+      reportCount: 3,
+      imageUrl:"https://images.unsplash.com/photo-1647964185717-a611ea46a46b?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+      id: "post_7",
+      title: "Comment with slur",
+      content: "Racial slurs and toxic language",
+      author: { username: "badGuy", id: "user_7" },
+      reportedReason: "Hate Speech",
+      reportedAt: "2025-07-11T19:40:00Z",
+      status: "pending",
+      reportCount: 7,
+      imageUrl:"https://images.unsplash.com/photo-1636277276132-7b44b4a0a838?q=80&w=1742&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    {
+      id: "post_8",
+      title: "Duplicate content",
+      content: "This post is exactly the same as another one",
+      author: { username: "copypastaFan", id: "user_8" },
+      reportedReason: "Duplicate",
+      reportedAt: "2025-07-10T14:50:00Z",
+      status: "pending",
+      reportCount: 2,
+      imageUrl:"https://api.backlinko.com/app/uploads/2020/01/similar-content.webp"
+    },
+    {
+      id: "post_9",
+      title: "Unverified medical advice",
+      content: "Drink bleach to cure your cold",
+      author: { username: "healthGuru", id: "user_9" },
+      reportedReason: "Misinformation",
+      reportedAt: "2025-07-10T07:15:00Z",
+      status: "pending",
+      reportCount: 8,
+      imageUrl:"https://img.onmanorama.com/content/dam/mm/en/archive/lifestyle/health/images/2025/6/28/conclave-1.jpg?w=1120&h=583"
+    },
+    {
+      id: "post_10",
+      title: "Overly self-promotional post",
+      content: "Buy my course now — 50% off!",
+      author: { username: "marketerMax", id: "user_10" },
+      reportedReason: "Advertisement",
+      reportedAt: "2025-07-09T10:00:00Z",
+      status: "pending",
+      reportCount: 4,
+      imageUrl:"https://www.thinkorion.com/wp-content/uploads/2024/06/discount-bundle-1024x574.png"
+    },
+    {
+      id: "post_11",
+      title: "Explicit content",
+      content: "Graphic and explicit material",
+      author: { username: "nsfwPoster", id: "user_11" },
+      reportedReason: "NSFW",
+      reportedAt: "2025-07-09T16:30:00Z",
+      status: "pending",
+      reportCount: 9,
+      imageUrl:"https://media.istockphoto.com/id/1477876674/vector/sensitive-photo-content-explicit-video-content-internet-safety-concept-censored-only-adult.jpg?s=612x612&w=0&k=20&c=2fzjaiPSztRGjl1yVkNKxfY1eVMFTeBR1YotmoGRBiA="
+    },
+    {
+      id: "post_12",
+      title: "Misleading title",
+      content: "You won't believe what happened next!",
+      author: { username: "clickbaitDude", id: "user_12" },
+      reportedReason: "Clickbait",
+      reportedAt: "2025-07-08T12:30:00Z",
+      status: "pending",
+      reportCount: 3,
+      imageUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKFeQjLpqR1cbpwnRkDBxZvQW0DFJJ2TQeHw&s"
+    },
+    {
+      id: "post_13",
+      title: "Flooding comments",
+      content: "Same comment posted 20 times",
+      author: { username: "spamFlood", id: "user_13" },
+      reportedReason: "Spam",
+      reportedAt: "2025-07-08T09:30:00Z",
+      status: "pending",
+      reportCount: 6,
+      imageUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-_LLWRS32SRaknyZ7ikg3IPIa0ALahR87Mg&s"
+    },
+    {
+      id: "post_14",
+      title: "Toxic debate post",
+      content: "You all are dumb, change my mind.",
+      author: { username: "ragePoster", id: "user_14" },
+      reportedReason: "Trolling",
+      reportedAt: "2025-07-07T18:00:00Z",
+      status: "pending",
+      reportCount: 4,
+      imageUrl:"https://images.indianexpress.com/2022/09/Co-founder-of-healthcare-companys-LinkedIn-post-about-%E2%80%98interview-hacks-triggers-debate.jpg?w=414"
+    },]
