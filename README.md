@@ -35,12 +35,13 @@ cd moderation-queue-app
 
 2.	Install dependencies:
 npm install
+npm install @reduxjs/toolkit react-redux react-hot-toast lucide-react
 
 3.	Start the development server:
 npm run dev
 Open http://localhost:5173 in your browser.
 
-🧩 Features Overview
+##🧩 Features Overview
 
 	| **Category**                | **Feature**                                                                 | **Implemented** | **Notes**                                                                 |
 |----------------------------|------------------------------------------------------------------------------|------------------|---------------------------------------------------------------------------|
@@ -71,3 +72,19 @@ Open http://localhost:5173 in your browser.
 | **Undo Functionality**     | Toast/snackbar with Undo option                                             | ✅ Yes           | "Undo" implemented with success feedback      
 
 
+## 📁 Folder Structure
+src/
+├── app/             # Redux store setup
+├── components/      # UI components
+├── features/        # Redux slices
+├── pages/           # Main application pages
+├── index.css        # Tailwind styles
+└── main.jsx         # App entry point
+
+---
+
+## 👨‍💻 Developed By
+
+**Pranav Kumbhar**  
+📧 Email: [kumpranav21@gmail.com](mailto:kumpranav21@gmail.com)  
+🔗 LinkedIn: [linkedin.com/in/pranavkumbhar](https://linkedin.com/in/pranavkumbhar)
