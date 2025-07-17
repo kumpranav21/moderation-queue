@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import mockPosts from '../data/mockPosts';
 import {
     setPosts,
+    setPreviewPost,
     toggleSelect,
     toggleSelectAll,
     updateStatus,
@@ -47,13 +48,25 @@ export default function ModerationQueue() {
     const isAllSelected =
         posts.filter((p) => p.status === 'pending').length === selected.length;
 
+    const filterStatus = useSelector((state) => state.posts.filterStatus);
+    const allPosts = useSelector((state) => state.posts.allPosts);
+
+    const statusCounts = {
+        pending: allPosts.filter((p) => p.status === 'pending').length,
+        approved: allPosts.filter((p) => p.status === 'approved').length,
+        rejected: allPosts.filter((p) => p.status === 'rejected').length,
+    };
+
+    const statusTabs = ['pending', 'approved', 'rejected'];
+
+    //keyboard shortcuts    
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
             // Ctrl+Z or Cmd+Z for undo
             if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-                e.preventDefault(); // prevent browser undo
+                e.preventDefault();
                 dispatch(undoStatus());
                 toast.success("Undo performed");
             }
@@ -69,12 +82,19 @@ export default function ModerationQueue() {
                     handleBatchAction('rejected');
                 }
             }
+
+            if (e.key === "Escape") {
+                dispatch(closePreviewModal());
+                setShortcutDialogOpen(false);
+            }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [selected, dispatch]);
 
+
+    //updates post(s) status
     const handleUpdateStatus = (id, newStatus) => {
         dispatch(updateStatus({ postId: id, status: newStatus }));
 
@@ -104,6 +124,8 @@ export default function ModerationQueue() {
         }, 5000);
     };
 
+
+    //updates batch post(s)
     const handleBatchAction = (status) => {
         dispatch(batchUpdateStatus({ ids: selected, status }));
 
@@ -128,17 +150,10 @@ export default function ModerationQueue() {
         setTimeout(() => dispatch(clearRecentAction()), 5000);
     };
 
-    const filterStatus = useSelector((state) => state.posts.filterStatus);
-    const allPosts = useSelector((state) => state.posts.allPosts);
 
-    const statusCounts = {
-        pending: allPosts.filter((p) => p.status === 'pending').length,
-        approved: allPosts.filter((p) => p.status === 'approved').length,
-        rejected: allPosts.filter((p) => p.status === 'rejected').length,
-    };
 
-    const statusTabs = ['pending', 'approved', 'rejected'];
 
+    //dialog for keyboard shortcuts
     function KeyboardShortcutsDialog({ isOpen, onClose }) {
         if (!isOpen) return null;
 
@@ -150,6 +165,7 @@ export default function ModerationQueue() {
                         <li><kbd className="font-mono">A</kbd> – Approve selected post(s)</li>
                         <li><kbd className="font-mono">R</kbd> – Reject selected post(s)</li>
                         <li><kbd className="font-mono">Ctrl/Cmd + Z</kbd> – Undo last action</li>
+                        <li><kbd className="font-mono">esc</kbd> – close preview modal</li>
                     </ul>
                     <div className="mt-6 text-right">
                         <button
@@ -164,51 +180,54 @@ export default function ModerationQueue() {
         );
     }
 
+    //handles image in preview modal (errors and loading state)
     function PostImage({ src, alt }) {
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(false);
-      
-        return (
-          <div className="relative w-full h-64 mb-4">
-            {/* Loader */}
-            {loading && !error && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded">
-                <span className="text-gray-500 text-sm">Loading image...</span>
-              </div>
-            )}
-      
-            {/* Error fallback */}
-            {error && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded">
-                <span className="text-red-500 text-sm">Failed to load image</span>
-              </div>
-            )}
-      
-            {/* Actual image */}
-            {!error && (
-              <img
-                src={src}
-                alt={alt}
-                onLoad={() => setLoading(false)}
-                onError={() => {
-                  setLoading(false);
-                  setError(true);
-                }}
-                className={`w-full h-64 object-cover rounded transition-opacity duration-300 ${
-                  loading ? "opacity-0" : "opacity-100"
-                }`}
-              />
-            )}
-          </div>
-        );
-      }
 
+        return (
+            <div className="relative w-full h-64 mb-4">
+                {/* Loader */}
+                {loading && !error && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded">
+                        <span className="text-gray-500 text-sm">Loading image...</span>
+                    </div>
+                )}
+
+                {/* Error fallback */}
+                {error && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded">
+                        <span className="text-red-500 text-sm">Failed to load image</span>
+                    </div>
+                )}
+
+                {/* Actual image */}
+                {!error && (
+                    <img
+                        src={src}
+                        alt={alt}
+                        onLoad={() => setLoading(false)}
+                        onError={() => {
+                            setLoading(false);
+                            setError(true);
+                        }}
+                        className={`w-full h-64 object-cover rounded transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"
+                            }`}
+                    />
+                )}
+            </div>
+        );
+    }
+
+
+    //content preview modal
     function ContentPreviewModal() {
         const dispatch = useDispatch();
+
         const { isOpen, postId } = useSelector((state) => state.posts.previewModal);
-        const post = useSelector((state) =>
-            state.posts.allPosts.find((p) => p.id === postId)
-        );
+        const allPosts = useSelector((state) => state.posts.allPosts);
+        const post = allPosts.find((p) => p.id === postId);
+        const currentIndex = allPosts.findIndex((p) => p.id === postId);
 
         if (!isOpen || !post) return null;
 
@@ -218,7 +237,8 @@ export default function ModerationQueue() {
                     {/* Close button */}
                     <button
                         onClick={() => dispatch(closePreviewModal())}
-                        className="absolute top-3 right-3 text-gray-600 hover:text-black text-xl"
+                        className="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-2xl transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 rounded-full p-1"
+                        aria-label="Close preview"
                     >
                         ✕
                     </button>
@@ -226,16 +246,24 @@ export default function ModerationQueue() {
                     {/* Header */}
                     <h2 className="text-2xl font-bold mb-1">{post.title}</h2>
                     <p className="text-sm text-gray-500 mb-4">
-                        Posted by <strong>{post.author.username}</strong> on{' '}
+                        Posted by <strong>{post.author.username}</strong> on{" "}
                         {new Date(post.reportedAt).toLocaleDateString()}
                     </p>
 
                     {/* Metadata Section */}
                     <div className="grid grid-cols-2 gap-y-1 text-sm text-gray-700 mb-4">
-                        <div><span className="font-semibold">Post ID:</span> {post.id}</div>
-                        <div><span className="font-semibold">Status:</span> {post.status}</div>
-                        <div><span className="font-semibold">Reported Reason:</span> {post.reportedReason}</div>
-                        <div><span className="font-semibold">Report Count:</span> {post.reportCount || 0}</div>
+                        <div>
+                            <span className="font-semibold">Post ID:</span> {post.id}
+                        </div>
+                        <div>
+                            <span className="font-semibold">Status:</span> {post.status}
+                        </div>
+                        <div>
+                            <span className="font-semibold">Reported Reason:</span> {post.reportedReason}
+                        </div>
+                        <div>
+                            <span className="font-semibold">Report Count:</span> {post.reportCount || 0}
+                        </div>
                         {post.rejectionReason && (
                             <div className="col-span-2">
                                 <span className="font-semibold">Rejection Note:</span> {post.rejectionReason}
@@ -248,12 +276,56 @@ export default function ModerationQueue() {
                     <h3 className="text-lg font-semibold text-gray-800 mb-2">Content</h3>
 
                     {/* Post Content */}
-                    <div className="prose max-w-full mb-4">
-                        {post.content}
-                    </div>
+                    <div className="prose max-w-full mb-4">{post.content}</div>
 
                     {/* Image (optional) */}
-                    <PostImage src={post.imageUrl} alt={post.title} />
+                    {post.imageUrl && <PostImage src={post.imageUrl} alt={post.title} />}
+
+                    {/* Action Buttons */}
+                    {post.status === 'pending' && (
+                        <div className="flex justify-center gap-8 mt-6 mb-6">
+                            <button
+                                onClick={() => handleUpdateStatus(post.id, 'approved')}
+                                className="px-4 py-2 text-sm font-semibold uppercase tracking-wider hover:bg-green-300 text-green-700 bg-green-200 rounded bg-opacity-50 transition"
+                            >
+                                Approve
+                            </button>
+                            <button
+                                onClick={() => {
+                                    dispatch(closePreviewModal());
+                                    setTimeout(() => {
+                                        dispatch(openRejectionModal(post.id));
+                                    }, 300); // adjust the delay as per your modal transition time
+                                }}
+                                className="px-4 py-2 text-sm font-semibold uppercase tracking-wider hover:bg-red-300 text-red-700 bg-red-200 rounded bg-opacity-50 transition"
+                            >
+                                Reject
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Navigation Buttons */}
+                    <div className="flex justify-between items-center mt-10">
+                        <button
+                            disabled={currentIndex <= 0}
+                            onClick={() =>
+                                dispatch(setPreviewPost(allPosts[currentIndex - 1].id))
+                            }
+                            className="px-3 py-1 rounded-lg bg-gray-200 text-black-700 hover:bg-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        >
+                            ← Previous
+                        </button>
+
+                        <button
+                            disabled={currentIndex >= allPosts.length - 1}
+                            onClick={() =>
+                                dispatch(setPreviewPost(allPosts[currentIndex + 1].id))
+                            }
+                            className="px-3 py-1 rounded-lg bg-gray-200 text-black-700 hover:bg-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        >
+                            Next →
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -373,8 +445,16 @@ export default function ModerationQueue() {
                                         />
                                     </td>
                                     <td
-                                        onClick={() => dispatch(openPreviewModal(post.id))}
-                                        className="p-3 text-sm text-blue-600 font-medium hover:underline cursor-pointer text-center">
+                                        onClick={() => {
+                                            if (post.status === 'pending') {
+                                                dispatch(openPreviewModal(post.id));
+                                            }
+                                        }}
+                                        className={`p-3 text-sm font-medium text-center ${post.status === 'pending'
+                                            ? 'text-blue-600 hover:underline cursor-pointer'
+                                            : 'text-gray-400 cursor-not-allowed'
+                                            }`}
+                                    >
                                         {post.title}
                                     </td>
 
