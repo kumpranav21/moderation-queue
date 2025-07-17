@@ -82,9 +82,10 @@ src/
 └── main.jsx         # App entry point
 
 ---
-
 ## 👨‍💻 Developed By
 
 **Pranav Kumbhar**  
 📧 Email: [kumpranav21@gmail.com](mailto:kumpranav21@gmail.com)  
 🔗 LinkedIn: [linkedin.com/in/pranavkumbhar](https://linkedin.com/in/pranavkumbhar)
+
+
